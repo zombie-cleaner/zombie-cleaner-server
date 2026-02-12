@@ -4,16 +4,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
     private static String SECRET;
     private static int TOKEN_EXPIRATION_HOURS;
     private static Key key;
 
-    @Value("${auth.security.exipration.hours}")
+    @Value("${auth.security.expiration.hours}")
     public void setTokenExpirationHours(int expirationHours){
         JwtUtil.TOKEN_EXPIRATION_HOURS = expirationHours;
     }

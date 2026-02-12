@@ -1,4 +1,4 @@
-package com.zombie_cleaner.zombie_cleaner_server.dtos.auth;
+package com.zombie_cleaner.zombie_cleaner_server.dtos.auth.requests;
 
 import lombok.Data;
 
