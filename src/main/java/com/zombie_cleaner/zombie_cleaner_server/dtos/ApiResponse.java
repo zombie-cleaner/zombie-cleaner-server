@@ -47,7 +47,6 @@ public class ApiResponse<T> {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
-
     public static <T> ApiResponse<T> failure(T data, String message){
         return ApiResponse.<T>builder()
                 .success(false)
