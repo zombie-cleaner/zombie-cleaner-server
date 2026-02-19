@@ -1,11 +1,9 @@
 package com.zombie_cleaner.zombie_cleaner_server.entities;
-import java.util.List;
-import jakarta.annotation.Nonnull;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.jspecify.annotations.NonNull;
 
 @Entity
 @Data
@@ -22,6 +20,4 @@ public class User {
     private String email;
     @Column(name = "password" , nullable = false)
     private String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Environment> environments;
 }
