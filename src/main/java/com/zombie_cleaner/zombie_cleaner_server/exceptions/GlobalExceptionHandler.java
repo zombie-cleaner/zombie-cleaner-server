@@ -1,6 +1,8 @@
 package com.zombie_cleaner.zombie_cleaner_server.exceptions;
 
 import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
+import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.AuthenticationException;
+import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceNotFoundException;
 import lombok.NonNull;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.http.HttpStatus;
@@ -13,10 +15,20 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<@NonNull ApiResponse<String>> handleNotFound()
-    {
-        ApiResponse<String> apiResponse = ApiResponse.failure("No such resource found");
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<@NonNull ApiResponse<String>>  handleResourceNotFoundException(ResourceNotFoundException ex){
+        ApiResponse<String> apiResponse = ApiResponse.failure(ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<@NonNull ApiResponse<String>> handleAuthenticationException(AuthenticationException ex){
+        ApiResponse<String> apiResponse = ApiResponse.failure("Authentication Failure : "+ ex.getMessage());
+        return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<@NonNull ApiResponse<String>> fallbackExceptionHandler(Exception ex){
+        ApiResponse<String> apiResponse = ApiResponse.failure(ex.getMessage());
+        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
