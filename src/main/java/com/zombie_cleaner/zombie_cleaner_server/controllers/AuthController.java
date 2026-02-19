@@ -1,15 +1,36 @@
 package com.zombie_cleaner.zombie_cleaner_server.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.requests.LoginRequest;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.requests.RegisterRequest;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.responses.LoginResponse;
+import com.zombie_cleaner.zombie_cleaner_server.services.impl.AuthServiceImpl;
+import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    @GetMapping("/login")
-    public String hello(){
-        return "asdf";
+
+    @Autowired
+    private AuthServiceImpl authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<@NonNull ApiResponse<LoginResponse>> login(
+            @RequestBody LoginRequest request
+    ) {
+        LoginResponse loginResponse = authService.login(request);
+        ApiResponse<LoginResponse> apiResponse = ApiResponse.success(loginResponse, "Logged in successfully ");
+        return new ResponseEntity<>(apiResponse, HttpStatus.FOUND);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<@NonNull ApiResponse<Boolean>> register(@RequestBody RegisterRequest request){
+        Boolean registerResponse = authService.register(request);
+        ApiResponse<Boolean> apiResponse = ApiResponse.success(registerResponse, "Registered Successfully");
+        return new ResponseEntity<>(apiResponse, HttpStatus.ACCEPTED);
     }
 }
