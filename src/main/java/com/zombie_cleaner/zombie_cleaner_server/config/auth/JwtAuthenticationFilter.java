@@ -1,5 +1,6 @@
 package com.zombie_cleaner.zombie_cleaner_server.config.auth;
 
+import com.zombie_cleaner.zombie_cleaner_server.services.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,9 +16,9 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService)
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService)
     {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
