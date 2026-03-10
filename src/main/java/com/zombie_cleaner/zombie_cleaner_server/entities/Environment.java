@@ -20,6 +20,6 @@ public class Environment {
     private List<Resource> resources;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

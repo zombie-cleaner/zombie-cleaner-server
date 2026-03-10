@@ -24,7 +24,7 @@ public class Resource {
     private String resourceIdentifierAws;
 
     @ManyToOne
-    @JoinColumn(name = "id" , nullable = false)
+    @JoinColumn(name = "environment_id" , nullable = false)
     private Environment environment;
 
 }
