@@ -1,12 +1,14 @@
 package com.zombie_cleaner.zombie_cleaner_server.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Environment {
 
     @Id

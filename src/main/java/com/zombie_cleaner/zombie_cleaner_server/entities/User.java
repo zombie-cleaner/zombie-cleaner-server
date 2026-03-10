@@ -2,13 +2,11 @@ package com.zombie_cleaner.zombie_cleaner_server.entities;
 import java.util.List;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.jspecify.annotations.NonNull;
 
 @Entity
-@Data
 @Getter
 @Setter
 public class User {

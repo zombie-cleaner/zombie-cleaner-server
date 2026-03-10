@@ -2,12 +2,14 @@ package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.repositories.EnvironmentRepository;
-import com.zombie_cleaner.zombie_cleaner_server.services.EnviornmentService;
+import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
+import org.springframework.stereotype.Service;
 
-public class EnvironmentServiceImpl implements EnviornmentService {
+@Service
+public class EnvironmentServiceImpl implements EnvironmentService {
     EnvironmentRepository environmentRepository;
 
-    EnvironmentServiceImpl(EnvironmentRepository environmentRepository) {
+    public EnvironmentServiceImpl(EnvironmentRepository environmentRepository) {
         this.environmentRepository = environmentRepository;
     }
 
