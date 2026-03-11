@@ -20,6 +20,12 @@ public class Environment {
     @Column(name="environmentName", nullable = false)
     private String environmentName;
 
+    @Column(name="description", nullable = false)
+    private String description;
+
+    @Column(name="environmentArn", nullable = false, unique = true)
+    private String environmentArn;
+
     @OneToMany(mappedBy = "environment", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Resource> resources;
