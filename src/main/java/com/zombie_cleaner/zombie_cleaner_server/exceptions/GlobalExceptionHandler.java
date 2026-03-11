@@ -29,6 +29,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<@NonNull ApiResponse<String>> fallbackExceptionHandler(Exception ex){
         ApiResponse<String> apiResponse = ApiResponse.failure(ex.getMessage());
-        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 }

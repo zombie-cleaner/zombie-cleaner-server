@@ -1,5 +1,7 @@
 package com.zombie_cleaner.zombie_cleaner_server.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +21,11 @@ public class Environment {
     private String environmentName;
 
     @OneToMany(mappedBy = "environment", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Resource> resources;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 }

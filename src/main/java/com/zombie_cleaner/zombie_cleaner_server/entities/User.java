@@ -1,5 +1,7 @@
 package com.zombie_cleaner.zombie_cleaner_server.entities;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,5 +23,6 @@ public class User {
     @Column(name = "password" , nullable = false)
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Environment> environments;
 }

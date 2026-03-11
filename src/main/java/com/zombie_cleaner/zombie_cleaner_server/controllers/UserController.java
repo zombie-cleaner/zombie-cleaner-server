@@ -16,7 +16,7 @@ public class UserController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/api/user/{id}")
     public ResponseEntity<@NonNull ApiResponse<UserDetailsResponse>> getUserDetails(@PathVariable String id) {
         UserDetailsResponse userDetailsResponse = userDetailsService.getUserWithEnvironments(Long.parseLong(id));
         ApiResponse<UserDetailsResponse> apiResponse = ApiResponse.success(userDetailsResponse, "User details retrieved successfully");

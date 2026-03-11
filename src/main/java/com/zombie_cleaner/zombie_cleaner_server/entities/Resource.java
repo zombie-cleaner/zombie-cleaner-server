@@ -1,5 +1,6 @@
 package com.zombie_cleaner.zombie_cleaner_server.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class Resource {
 
     @ManyToOne
     @JoinColumn(name = "environment_id" , nullable = false)
+    @JsonBackReference
     private Environment environment;
 
 }
