@@ -1,5 +1,6 @@
 package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
+import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentSummary;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.user.responses.UserDetailsResponse;
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.entities.User;
@@ -9,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -34,15 +35,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         );
     }
 
-    public UserDetailsResponse getUserWithEnvironments(Long id){
+    public UserDetailsResponse getUserWithEnvironments(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Environment[] environments = environmentService.getUsersAllEnvironments(String.valueOf(id));
 
         UserDetailsResponse response = new UserDetailsResponse();
+
+
         response.setEmail(user.getEmail());
-        response.setEnvironments(List.of(environments));
+        response.setEnvironments(Arrays.stream(environments)
+                .map(env -> new EnvironmentSummary(
+                        env.getEnvironmentName(),
+                        env.getDescription(),
+                        env.getEnvironmentArn(),
+                        env.getResources() != null ? env.getResources().size() : 0
+                        )
+                )
+                .toList());
 
         return response;
     }
