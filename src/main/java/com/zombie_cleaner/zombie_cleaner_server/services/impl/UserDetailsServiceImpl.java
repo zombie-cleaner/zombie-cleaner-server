@@ -47,6 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         response.setEmail(user.getEmail());
         response.setEnvironments(Arrays.stream(environments)
                 .map(env -> new EnvironmentSummary(
+                        env.getId(),
                         env.getEnvironmentName(),
                         env.getDescription(),
                         env.getEnvironmentArn(),

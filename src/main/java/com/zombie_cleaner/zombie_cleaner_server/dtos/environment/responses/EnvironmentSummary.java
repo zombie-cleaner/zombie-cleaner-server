@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EnvironmentSummary {
+    private Long id;
     private String environmentName;
     private String description;
     private String environmentArn;
