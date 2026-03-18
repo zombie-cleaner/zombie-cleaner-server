@@ -1,5 +1,6 @@
 package com.zombie_cleaner.zombie_cleaner_server.config.auth;
 
+import com.zombie_cleaner.zombie_cleaner_server.entities.User;
 import com.zombie_cleaner.zombie_cleaner_server.services.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,9 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             String email = jwtUtil.extractEmail(token);
 
-            UserDetails userDetails = userDetailsService.loadUserByEmail(email);
+            User userDetails = userDetailsService.loadUserByEmail(email);
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, null);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

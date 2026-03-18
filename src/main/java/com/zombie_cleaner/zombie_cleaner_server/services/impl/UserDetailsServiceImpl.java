@@ -24,15 +24,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
+    public User loadUserByEmail(String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                Collections.emptyList()
-        );
     }
 
     public UserDetailsResponse getUserWithEnvironments(Long id) {

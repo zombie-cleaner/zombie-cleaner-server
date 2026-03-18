@@ -20,7 +20,7 @@ public class Environment {
     @Column(name="environmentName", nullable = false)
     private String environmentName;
 
-    @Column(name="description", nullable = false)
+    @Column(name="description", nullable = true)
     private String description;
 
     @Column(name="environmentArn", nullable = false, unique = true)
