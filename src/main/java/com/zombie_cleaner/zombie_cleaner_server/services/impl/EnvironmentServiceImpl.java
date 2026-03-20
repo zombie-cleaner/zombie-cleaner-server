@@ -1,5 +1,7 @@
 package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
+import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.resource.responses.ResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceNotFoundException;
 import com.zombie_cleaner.zombie_cleaner_server.repositories.EnvironmentRepository;
@@ -21,8 +23,9 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     }
 
     @Override
-    public Environment getEnvironmentById(String id) {
+    public EnvironmentDetails getEnvironmentById(String id) {
         Environment environment = environmentRepository.getEnvironmentById(Long.parseLong(id)).orElseThrow(()-> new ResourceNotFoundException("Environment", "Environment Id", id));
+
         return environment;
     }
 }

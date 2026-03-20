@@ -16,8 +16,11 @@ public class EnvironmentController {
     @Autowired
     private EnvironmentService environmentService;
 
-    @GetMapping("/api/environment/{id}")
-    public ResponseEntity<@NonNull ApiResponse<Environment>> getEnvironmentById(@PathVariable String id) {
+    @Autowired
+    private AuthenticationUtil authenticationUtil;
+
+    /**
+
         Environment environment = environmentService.getEnvironmentById(id);
         if (environment != null) {
             ApiResponse<Environment> response = ApiResponse.success(environment, "Environment retrieved successfully");
@@ -26,6 +29,15 @@ public class EnvironmentController {
             ApiResponse<Environment> response = ApiResponse.failure("Environment not found");
             return ResponseEntity.status(404).body(response);
         }
+
+        // Get the current user's ID from the authenticated principal
+        Long currentUserId = authenticationUtil.getCurrentUserId();
+
+        // Fetch environment and verify ownership
+        Environment environment = environmentService.getEnvironmentByIdForUser(id, currentUserId);
+        return ResponseEntity.ok(response);
     }
 
 }
+
+

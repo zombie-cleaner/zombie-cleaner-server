@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface EnvironmentRepository extends JpaRepository<@NonNull Environment,@NonNull Long> {
     Optional<Environment[]> getUserEnvironmentsByUserId(Long id);
     Optional<Environment> getEnvironmentById(Long id);
-
 }
