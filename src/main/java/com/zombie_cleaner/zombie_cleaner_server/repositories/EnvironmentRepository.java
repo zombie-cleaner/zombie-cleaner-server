@@ -1,5 +1,6 @@
 package com.zombie_cleaner.zombie_cleaner_server.repositories;
 
+import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,5 +9,5 @@ import java.util.Optional;
 
 public interface EnvironmentRepository extends JpaRepository<@NonNull Environment,@NonNull Long> {
     Optional<Environment[]> getUserEnvironmentsByUserId(Long id);
-    Optional<Environment> getEnvironmentById(Long id);
+    Optional<EnvironmentDetails> getEnvironmentDetailsById(Long id);
 }

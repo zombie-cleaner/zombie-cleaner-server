@@ -3,12 +3,9 @@ package com.zombie_cleaner.zombie_cleaner_server.exceptions;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.AuthenticationException;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceNotFoundException;
-import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.UnauthorizedException;
 import lombok.NonNull;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -28,15 +25,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<@NonNull ApiResponse<String>> handleUnauthorizedException(UnauthorizedException ex){
-        ApiResponse<String> apiResponse = ApiResponse.failure("Authorization Failure : "+ ex.getMessage());
-        return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<@NonNull ApiResponse<String>> handleNoHandlerFoundException(NoHandlerFoundException ex){
+        ApiResponse<String> apiResponse = ApiResponse.failure("Endpoint not found: " + ex.getRequestURL());
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<@NonNull ApiResponse<String>> fallbackExceptionHandler(Exception ex){
-        ApiResponse<String> apiResponse = ApiResponse.failure(ex.getMessage());
-        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+    public ResponseEntity<@NonNull ApiResponse<String>> handleInternalServerError(Exception ex){
+        ApiResponse<String> apiResponse = ApiResponse.failure("Internal server error. Please contact support.");
+        System.out.println("Unhandled exception: " + ex.getMessage());
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
