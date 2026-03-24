@@ -6,9 +6,9 @@ import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface EnvironmentRepository extends JpaRepository<@NonNull Environment,@NonNull Long> {
-    Optional<Environment[]> getUserEnvironmentsByUserId(Long id);
-    Optional<Environment> getEnvironmentById(Long id);
+    Optional<List<Environment>> getUserEnvironmentsByUserId(Long id);
 }

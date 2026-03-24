@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -33,13 +34,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        Environment[] environments = environmentService.getUsersAllEnvironments(String.valueOf(id));
+        List<Environment> environments = environmentService.getUsersAllEnvironments(String.valueOf(id));
 
         UserDetailsResponse response = new UserDetailsResponse();
 
 
         response.setEmail(user.getEmail());
-        response.setEnvironments(Arrays.stream(environments)
+        response.setEnvironments( environments
+                .stream()
                 .map(env -> new EnvironmentSummary(
                         env.getId(),
                         env.getEnvironmentName(),

@@ -20,15 +20,15 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     }
 
     @Override
-    public Environment[] getUsersAllEnvironments(String id) {
-        Environment[] environments = environmentRepository.getUserEnvironmentsByUserId(Long.parseLong(id)).orElseThrow(()-> new ResourceNotFoundException("Environments", "User Id", id));
+    public List<Environment> getUsersAllEnvironments(String id) {
+        List<Environment> environments = environmentRepository.getUserEnvironmentsByUserId(Long.parseLong(id)).orElseThrow(()-> new ResourceNotFoundException("Environments", "User Id", id));
         return environments;
     }
 
     @Override
     public EnvironmentDetails getEnvironmentById(String id, Long userId) throws AuthenticationException {
         System.out.println("hello");
-        Environment environment = environmentRepository.getEnvironmentById(Long.parseLong(id)).orElseThrow(()-> new ResourceNotFoundException("Environment", "Environment Id", id));
+        Environment environment = environmentRepository.findById(Long.parseLong(id)).orElseThrow(()-> new ResourceNotFoundException("Environment", "Environment Id", id));
         if(!environment.getUser().getId().equals(userId)){
             throw new AuthenticationException("Unauthorized access to environment with id: " + id);
         }

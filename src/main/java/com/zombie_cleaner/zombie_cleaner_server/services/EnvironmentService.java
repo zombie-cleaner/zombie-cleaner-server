@@ -4,7 +4,9 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.Envir
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import org.apache.tomcat.websocket.AuthenticationException;
 
+import java.util.List;
+
 public interface EnvironmentService {
-    public Environment[] getUsersAllEnvironments(String id);
+    public List<Environment> getUsersAllEnvironments(String id);
     public EnvironmentDetails getEnvironmentById(String id, Long userId) throws AuthenticationException;
 }
