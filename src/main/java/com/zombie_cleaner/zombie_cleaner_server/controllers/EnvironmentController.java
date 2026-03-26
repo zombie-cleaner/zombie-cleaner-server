@@ -1,16 +1,16 @@
 package com.zombie_cleaner.zombie_cleaner_server.controllers;
 
 import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.requests.CreateEnvironmentRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class EnvironmentController {
@@ -42,6 +42,12 @@ public class EnvironmentController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/api/environment")
+    public ResponseEntity<@NonNull ApiResponse<Environment>> createEnvironment(@RequestBody CreateEnvironmentRequest environmentRequest) {
+        Environment environment = environmentService.createEnvironment(environmentRequest);
+        ApiResponse<Environment> apiResponse = ApiResponse.success(environment, "Environment created successfully");
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+    }
 }
 
 

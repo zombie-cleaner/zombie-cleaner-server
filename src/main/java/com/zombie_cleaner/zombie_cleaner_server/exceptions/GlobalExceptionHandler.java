@@ -2,6 +2,8 @@ package com.zombie_cleaner.zombie_cleaner_server.exceptions;
 
 import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.AuthenticationException;
+import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.DatabaseException;
+import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceAlreadyExistsException;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceNotFoundException;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<@NonNull ApiResponse<String>> handleNoHandlerFoundException(NoHandlerFoundException ex){
         ApiResponse<String> apiResponse = ApiResponse.failure("Endpoint not found: " + ex.getRequestURL());
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<@NonNull ApiResponse<String>> handleDatabaseException(DatabaseException ex){
+        ApiResponse<String> apiResponse = ApiResponse.failure("Database error: " + ex.getMessage());
+        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<@NonNull ApiResponse<String>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex){
+        ApiResponse<String> apiResponse = ApiResponse.failure("Conflict: " + ex.getMessage());
+        return new ResponseEntity<>(apiResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)

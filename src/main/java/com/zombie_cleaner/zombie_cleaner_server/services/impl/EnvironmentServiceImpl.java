@@ -1,12 +1,17 @@
 package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
+import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.requests.CreateEnvironmentRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.resource.responses.ResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
+import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.DatabaseException;
+import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceAlreadyExistsException;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceNotFoundException;
 import com.zombie_cleaner.zombie_cleaner_server.repositories.EnvironmentRepository;
 import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
 import org.apache.tomcat.websocket.AuthenticationException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,5 +52,23 @@ public class EnvironmentServiceImpl implements EnvironmentService {
         environmentDetails.setEnvironmentName(environment.getEnvironmentName());
         environmentDetails.setResources(resources);
         return environmentDetails;
+    }
+
+    @Override
+    public Environment createEnvironment(CreateEnvironmentRequest environmentRequest) {
+        try{
+            Environment environment = new Environment();
+            environment.setEnvironmentName(environmentRequest.getEnvironmentName());
+            environment.setDescription(environmentRequest.getDescription());
+            environment.setEnvironmentArn(environmentRequest.getEnvironmentArn());
+            return environmentRepository.save(environment);
+        }catch (DataIntegrityViolationException e) {
+            if(e.getCause() instanceof ConstraintViolationException){
+                throw new ResourceAlreadyExistsException("Evironment with name '" + environmentRequest.getEnvironmentName() + "' already exists for this user.");
+            }
+            throw new DatabaseException("Failed to save environment due to data integrity violation.");
+        } catch (Exception e) {
+            throw new DatabaseException("An unexpected error occurred while saving the environment.");
+        }
     }
 }
