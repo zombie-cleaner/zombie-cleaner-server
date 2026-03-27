@@ -54,6 +54,9 @@ public class EnvironmentServiceImpl implements EnvironmentService {
         EnvironmentDetails environmentDetails = new EnvironmentDetails();
         environmentDetails.setId(environment.getId());
         environmentDetails.setEnvironmentName(environment.getEnvironmentName());
+        environmentDetails.setEnvironmentArn(environment.getEnvironmentArn());
+        environmentDetails.setDescription(environmentDetails.getDescription());
+        environmentDetails.setUserId(environment.getUser().getId());
         environmentDetails.setResources(resources);
         return environmentDetails;
     }
