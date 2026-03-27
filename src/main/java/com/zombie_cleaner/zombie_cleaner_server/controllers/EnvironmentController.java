@@ -6,6 +6,7 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.Envir
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class EnvironmentController {
     }
 
     @PostMapping("/api/environment")
-    public ResponseEntity<@NonNull ApiResponse<Environment>> createEnvironment(@RequestBody CreateEnvironmentRequest environmentRequest) {
+    public ResponseEntity<@NonNull ApiResponse<Environment>> createEnvironment(@Valid @RequestBody CreateEnvironmentRequest environmentRequest) {
         Environment environment = environmentService.createEnvironment(environmentRequest);
         ApiResponse<Environment> apiResponse = ApiResponse.success(environment, "Environment created successfully");
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);

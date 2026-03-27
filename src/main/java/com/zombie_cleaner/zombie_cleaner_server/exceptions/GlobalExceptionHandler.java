@@ -8,6 +8,8 @@ import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.Reso
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import java.util.*;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -43,6 +45,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<@NonNull ApiResponse<String>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex){
         ApiResponse<String> apiResponse = ApiResponse.failure("Conflict: " + ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<@NonNull ApiResponse<Map<String, String>>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                fieldErrors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        ApiResponse<Map<String, String>> apiResponse = ApiResponse.failure(fieldErrors, "Validation failed");
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

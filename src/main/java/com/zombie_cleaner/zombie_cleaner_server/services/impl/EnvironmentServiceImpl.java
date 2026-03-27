@@ -4,10 +4,12 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.requests.Create
 import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.resource.responses.ResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
+import com.zombie_cleaner.zombie_cleaner_server.entities.User;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.DatabaseException;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceAlreadyExistsException;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceNotFoundException;
 import com.zombie_cleaner.zombie_cleaner_server.repositories.EnvironmentRepository;
+import com.zombie_cleaner.zombie_cleaner_server.repositories.UserRepository;
 import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -19,9 +21,11 @@ import java.util.List;
 @Service
 public class EnvironmentServiceImpl implements EnvironmentService {
     EnvironmentRepository environmentRepository;
+    UserRepository userRepository;
 
-    public EnvironmentServiceImpl(EnvironmentRepository environmentRepository) {
+    public EnvironmentServiceImpl(EnvironmentRepository environmentRepository, UserRepository userRepository) {
         this.environmentRepository = environmentRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,10 +61,13 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     @Override
     public Environment createEnvironment(CreateEnvironmentRequest environmentRequest) {
         try{
+            User user = userRepository.findById(Long.parseLong(environmentRequest.getUserId())).orElseThrow(()-> new ResourceNotFoundException("User", "User Id", environmentRequest.getUserId()));
+
             Environment environment = new Environment();
             environment.setEnvironmentName(environmentRequest.getEnvironmentName());
             environment.setDescription(environmentRequest.getDescription());
             environment.setEnvironmentArn(environmentRequest.getEnvironmentArn());
+            environment.setUser(user);
             return environmentRepository.save(environment);
         }catch (DataIntegrityViolationException e) {
             if(e.getCause() instanceof ConstraintViolationException){
