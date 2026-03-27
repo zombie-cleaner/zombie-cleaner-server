@@ -5,6 +5,7 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.requests.LoginRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.requests.RegisterRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.responses.LoginResponse;
 import com.zombie_cleaner.zombie_cleaner_server.services.impl.AuthServiceImpl;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<@NonNull ApiResponse<LoginResponse>> login(
-            @RequestBody LoginRequest request
+            @Valid @RequestBody LoginRequest request
     ) {
         LoginResponse loginResponse = authService.login(request);
         ApiResponse<LoginResponse> apiResponse = ApiResponse.success(loginResponse, "Logged in successfully ");
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<@NonNull ApiResponse<Boolean>> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<@NonNull ApiResponse<Boolean>> register(@Valid @RequestBody RegisterRequest request){
         Boolean registerResponse = authService.register(request);
         ApiResponse<Boolean> apiResponse = ApiResponse.success(registerResponse, "Registered Successfully");
         return new ResponseEntity<>(apiResponse, HttpStatus.ACCEPTED);

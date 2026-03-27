@@ -1,6 +1,7 @@
 package com.zombie_cleaner.zombie_cleaner_server.dtos.environment.requests;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -10,6 +11,7 @@ public class CreateEnvironmentRequest {
     @NotBlank(message = "Description is required")
     private String description;
     @NotBlank(message = "Environment ARN is required")
+    @Pattern(regexp = "^arn:(aws[a-zA-Z-]*)?:[a-z0-9-]+:[a-z0-9-]*:[0-9]*:.+$", message = "Invalid AWS arn format")
     private String environmentArn;
     @NotBlank(message = "User ID is required")
     private String userId;
