@@ -5,10 +5,14 @@ import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.Auth
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.DatabaseException;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceAlreadyExistsException;
 import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.ResourceNotFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.*;
+
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,10 +63,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(org.apache.tomcat.websocket.AuthenticationException.class)
+    public ResponseEntity<?> handleAuthenticationException(org.apache.tomcat.websocket.AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Authentication error: " + ex.getMessage()));
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<@NonNull ApiResponse<String>> handleInternalServerError(Exception ex){
         ApiResponse<String> apiResponse = ApiResponse.failure("Internal server error. Please contact support.");
-        System.out.println("Unhandled exception: " + ex.getMessage());
+        System.out.println("Unhandled exception: " + ex);
 
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,7 +1,9 @@
 package com.zombie_cleaner.zombie_cleaner_server.config.auth;
 
-import com.zombie_cleaner.zombie_cleaner_server.entities.User;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.context.annotation.Bean;
+import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.AuthenticationException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +25,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http
+            try{
+            http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers(
@@ -42,7 +45,15 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+            return http.build();
+        }
+        catch(ExpiredJwtException ex){
+            throw new AuthenticationException("JWT token expired");
+        }
+        catch(SignatureException ex){
+            throw new AuthenticationException("Invalid JWT signature");
+        }
+
     }
 
     @Bean
