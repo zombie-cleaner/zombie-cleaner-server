@@ -49,6 +49,8 @@ public class EnvironmentController {
         ApiResponse<Environment> apiResponse = ApiResponse.success(environment, "Environment created successfully");
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
+
+//    @GetMapping("/api/environm")
 }
 
 
