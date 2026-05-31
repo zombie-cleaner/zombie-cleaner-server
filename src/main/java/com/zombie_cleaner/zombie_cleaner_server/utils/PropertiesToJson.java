@@ -13,6 +13,6 @@ public class PropertiesToJson {
     private ObjectMapper objectMapper = new ObjectMapper();
     public JacksonProperties.Json getJson(Map<String,Object> properties){
         String JsonString = objectMapper.writeValueAsString(properties);
-        return new JacksonProperties.Json(JsonString);
+        return new JacksonProperties.Json();
     }
 }

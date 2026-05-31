@@ -19,7 +19,7 @@ public class AwsCredentialUtil {
     @Value("${aws.region}")
     private String region;
 
-    public AwsCredentialsProvider getAssumeRoleCredentialsProvider() throws RuntimeException {
+    public AwsCredentialsProvider getAssumeRoleCredentialsProvider(String externalId) throws RuntimeException {
         try (StsClient stsClient = StsClient.builder()
                 .region(Region.of(region))
                 .build()
@@ -27,6 +27,7 @@ public class AwsCredentialUtil {
             AssumeRoleRequest assumeRoleRequest = AssumeRoleRequest.builder()
                     .roleArn(roleArn)
                     .roleSessionName(sessionName)
+                    .externalId(externalId)
                     .build();
             return StsAssumeRoleCredentialsProvider.builder()
                     .stsClient(stsClient)

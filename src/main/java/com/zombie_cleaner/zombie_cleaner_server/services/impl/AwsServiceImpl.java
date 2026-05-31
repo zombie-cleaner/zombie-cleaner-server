@@ -26,10 +26,15 @@ public class AwsServiceImpl implements AwsService {
     private final AwsClientFactory factory;
 
     @Override
-    public List<ExternalResourceSummary> getRDSList() {
+    public List<List<ExternalResourceSummary>> getResources(String environmentId){
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ExternalResourceSummary> getRDSList(String externalId) {
         List<ExternalResourceSummary> resources = new ArrayList<>();
 
-        try (RdsClient rdsClient = factory.createClient(RdsClient::builder)) {
+        try (RdsClient rdsClient = factory.createClient(RdsClient::builder, externalId)) {
             DescribeDbInstancesResponse response = rdsClient.describeDBInstances();
 
             for (DBInstance db : response.dbInstances()) {
@@ -54,10 +59,10 @@ public class AwsServiceImpl implements AwsService {
     }
 
     @Override
-    public List<ExternalResourceSummary> getEC2List() {
+    public List<ExternalResourceSummary> getEC2List(String externalId) {
         List<ExternalResourceSummary> resources = new ArrayList<>();
 
-        try (Ec2Client ec2Client = factory.createClient(Ec2Client::builder)) {
+        try (Ec2Client ec2Client = factory.createClient(Ec2Client::builder, externalId)) {
             DescribeInstancesResponse response = ec2Client.describeInstances();
 
             response.reservations().forEach(reservation -> {
@@ -85,10 +90,10 @@ public class AwsServiceImpl implements AwsService {
     }
 
     @Override
-    public List<ExternalResourceSummary> getS3List() {
+    public List<ExternalResourceSummary> getS3List(String externalId) {
         List<ExternalResourceSummary> resources = new ArrayList<>();
 
-        try (S3Client s3Client = factory.createClient(S3Client::builder)) {
+        try (S3Client s3Client = factory.createClient(S3Client::builder, externalId)) {
             ListBucketsResponse response = s3Client.listBuckets();
 
             for (Bucket bucket : response.buckets()) {
@@ -110,7 +115,7 @@ public class AwsServiceImpl implements AwsService {
     }
 
     @Override
-    public List<ExternalResourceSummary> getLogGroupsList() {
+    public List<ExternalResourceSummary> getLogGroupsList(String externalId) {
         // Implementation for CloudWatch Logs can go here
         return new ArrayList<>();
     }
