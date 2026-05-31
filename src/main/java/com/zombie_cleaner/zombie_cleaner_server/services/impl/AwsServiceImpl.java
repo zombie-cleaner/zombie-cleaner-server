@@ -1,62 +1,117 @@
 package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
-import com.zombie_cleaner.zombie_cleaner_server.dtos.resource.responses.ResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.services.AwsService;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AwsClientFactory;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jackson.autoconfigure.JacksonProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.ec2.model.Instance;
+import software.amazon.awssdk.services.ec2.model.DescribeInstancesResponse;
 import software.amazon.awssdk.services.rds.RdsClient;
 import software.amazon.awssdk.services.rds.model.DBInstance;
 import software.amazon.awssdk.services.rds.model.DescribeDbInstancesResponse;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AwsServiceImpl implements AwsService {
 
-    @Value("${aws.region}")
-    private String region;
-
-    AwsClientFactory factory = new AwsClientFactory();
+    private final AwsClientFactory factory;
 
     @Override
     public List<ExternalResourceSummary> getRDSList() {
         List<ExternalResourceSummary> resources = new ArrayList<>();
 
-        try(RdsClient rdsClient = factory.createClient(RdsClient::builder)){
+        try (RdsClient rdsClient = factory.createClient(RdsClient::builder)) {
             DescribeDbInstancesResponse response = rdsClient.describeDBInstances();
 
-            for(DBInstance db : response.dbInstances()){
-
-                JacksonProperties.Json propertiesJson =
-
+            for (DBInstance db : response.dbInstances()) {
                 resources.add(
-                        new ExternalResourceSummary(
-                              db.dbInstanceArn(),
-                              db.dbName(),
-                              "RDS",
-
-                        )
+                        ExternalResourceSummary.builder()
+                                .resourceArn(db.dbInstanceArn())
+                                .resourceName(db.dbInstanceIdentifier())
+                                .resourceType("RDS")
+                                .properties(Map.of(
+                                        "allocatedStorage", db.allocatedStorage(),
+                                        "dbInstanceStatus", db.dbInstanceStatus(),
+                                        "engine", db.engine(),
+                                        "instanceClass", db.dbInstanceClass()
+                                ))
+                                .build()
                 );
             }
-
             return resources;
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching RDS instances", e);
         }
     }
-    public List<ExternalResourceSummary> getEC2List(){
 
+    @Override
+    public List<ExternalResourceSummary> getEC2List() {
+        List<ExternalResourceSummary> resources = new ArrayList<>();
+
+        try (Ec2Client ec2Client = factory.createClient(Ec2Client::builder)) {
+            DescribeInstancesResponse response = ec2Client.describeInstances();
+
+            response.reservations().forEach(reservation -> {
+                for (Instance instance : reservation.instances()) {
+                    resources.add(
+                            ExternalResourceSummary.builder()
+                                    .resourceArn(instance.instanceId()) // EC2 doesn't always have ARN easily accessible in simple list
+                                    .resourceName(instance.tags().stream()
+                                            .filter(t -> t.key().equals("Name"))
+                                            .findFirst().map(t -> t.value()).orElse(instance.instanceId()))
+                                    .resourceType("EC2")
+                                    .properties(Map.of(
+                                            "instanceType", instance.instanceTypeAsString(),
+                                            "state", instance.state().nameAsString(),
+                                            "publicIp", instance.publicIpAddress() != null ? instance.publicIpAddress() : "N/A"
+                                    ))
+                                    .build()
+                    );
+                }
+            });
+            return resources;
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching EC2 instances", e);
+        }
     }
-    public List<ExternalResourceSummary> getS3List(){
 
+    @Override
+    public List<ExternalResourceSummary> getS3List() {
+        List<ExternalResourceSummary> resources = new ArrayList<>();
+
+        try (S3Client s3Client = factory.createClient(S3Client::builder)) {
+            ListBucketsResponse response = s3Client.listBuckets();
+
+            for (Bucket bucket : response.buckets()) {
+                resources.add(
+                        ExternalResourceSummary.builder()
+                                .resourceArn("arn:aws:s3:::" + bucket.name())
+                                .resourceName(bucket.name())
+                                .resourceType("S3")
+                                .properties(Map.of(
+                                        "creationDate", bucket.creationDate().toString()
+                                ))
+                                .build()
+                );
+            }
+            return resources;
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching S3 buckets", e);
+        }
     }
-    public List<ExternalResourceSummary> getLogGroupsList(){
 
+    @Override
+    public List<ExternalResourceSummary> getLogGroupsList() {
+        // Implementation for CloudWatch Logs can go here
+        return new ArrayList<>();
     }
 }

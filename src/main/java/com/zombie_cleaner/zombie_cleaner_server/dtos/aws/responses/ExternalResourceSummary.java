@@ -1,22 +1,19 @@
 package com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.springframework.boot.jackson.autoconfigure.JacksonProperties;
+import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ExternalResourceSummary {
-//    private Long id;
-//    private String resourceName;
-//    private String resourceType;
-//    private String resourceArn;
-//    private String resourceIdentifierAws;
-//    private String resourceNameAws;
-    private String roleArn;
+    private String resourceArn;
     private String resourceName;
     private String resourceType;
-
-    private JacksonProperties.Json propertiesJson;
-
+    private Map<String, Object> properties;
 }
