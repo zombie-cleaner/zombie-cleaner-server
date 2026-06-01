@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -27,4 +28,15 @@ public class ResourceController {
         ApiResponse<List<List<ExternalResourceSummary>>> response = ApiResponse.success(lists);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+//    @PostMapping("/api/{environmentId}/resources/delete/{resourceArn}")
+//    public ResponseEntity<@NonNull ApiResponse<Boolean>> setDeleteEvent(@PathVariable String environmentId, @PathVariable String resourceArn){
+//
+//    }
+//
+//    Scheduled downtime
+//    @PostMapping("/api/{environmentId}/resource/update/{resourceArn}")
+//    public ResponseEntity<@NonNull ApiResponse<Boolean>> setUpdateEvent(@PathVariable String environmentId, @PathVariable String resourceArn){
+//
+//    }
 }

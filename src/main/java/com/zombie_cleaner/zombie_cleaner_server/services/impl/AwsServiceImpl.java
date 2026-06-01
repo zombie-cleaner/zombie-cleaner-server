@@ -2,7 +2,6 @@ package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
-import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.services.AwsService;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AwsClientFactory;
@@ -138,5 +137,15 @@ public class AwsServiceImpl implements AwsService {
     public List<ExternalResourceSummary> getLogGroupsList(String externalId) {
         // Implementation for CloudWatch Logs can go here
         return new ArrayList<>();
+    }
+
+    @Override
+    public boolean setDeleteEvent(){
+        return true;
+    }
+
+    @Override
+    public boolean setUpdateEvent(){
+        return true;
     }
 }

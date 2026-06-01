@@ -11,4 +11,8 @@ public interface AwsService {
     public List<ExternalResourceSummary> getEC2List(String externalId);
     public List<ExternalResourceSummary> getS3List(String externalId);
     public List<ExternalResourceSummary> getLogGroupsList(String externalId);
+
+    boolean setDeleteEvent();
+
+    boolean setUpdateEvent();
 }
