@@ -36,7 +36,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 
     @Override
     public EnvironmentDetails getEnvironmentById(String id, Long userId) throws AuthenticationException {
-        System.out.println("hello");
+
         Environment environment = environmentRepository.findById(Long.parseLong(id)).orElseThrow(()-> new ResourceNotFoundException("Environment", "Environment Id", id));
         if(!environment.getUser().getId().equals(userId)){
             throw new AuthenticationException("Unauthorized access to environment with id: " + id);
@@ -54,7 +54,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
         EnvironmentDetails environmentDetails = new EnvironmentDetails();
         environmentDetails.setId(environment.getId());
         environmentDetails.setEnvironmentName(environment.getEnvironmentName());
-        environmentDetails.setEnvironmentArn(environment.getEnvironmentArn());
+        environmentDetails.setExternalId(environment.getExternalId());
         environmentDetails.setDescription(environmentDetails.getDescription());
         environmentDetails.setUserId(environment.getUser().getId());
         environmentDetails.setResources(resources);
@@ -69,7 +69,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
             Environment environment = new Environment();
             environment.setEnvironmentName(environmentRequest.getEnvironmentName());
             environment.setDescription(environmentRequest.getDescription());
-            environment.setEnvironmentArn(environmentRequest.getEnvironmentArn());
+            environment.setExternalId(environmentRequest.getExternalId());
             environment.setUser(user);
             return environmentRepository.save(environment);
         }catch (DataIntegrityViolationException e) {

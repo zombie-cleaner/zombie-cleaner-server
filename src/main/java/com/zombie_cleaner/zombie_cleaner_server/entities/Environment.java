@@ -23,8 +23,8 @@ public class Environment {
     @Column(name="description", nullable = true)
     private String description;
 
-    @Column(name="environmentArn", nullable = false, unique = true)
-    private String environmentArn;
+    @Column(name="externalId", nullable = false, unique = true)
+    private String externalId;
 
     @OneToMany(mappedBy = "environment", cascade = CascadeType.ALL)
     @JsonManagedReference

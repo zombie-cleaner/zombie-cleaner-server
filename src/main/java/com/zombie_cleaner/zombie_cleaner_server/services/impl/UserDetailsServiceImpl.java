@@ -46,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         env.getId(),
                         env.getEnvironmentName(),
                         env.getDescription(),
-                        env.getEnvironmentArn(),
+                        env.getExternalId(),
                         env.getResources() != null ? env.getResources().size() : 0
                         )
                 )

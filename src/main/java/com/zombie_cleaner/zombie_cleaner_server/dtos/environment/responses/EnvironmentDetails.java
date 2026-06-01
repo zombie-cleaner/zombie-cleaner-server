@@ -14,7 +14,7 @@ public class EnvironmentDetails {
     private Long id;
     private String environmentName;
     private String description;
-    private String environmentArn;
+    private String externalId;
     private Long userId;
     private List<ResourceSummary> resources;
 }

@@ -11,8 +11,9 @@ public class CreateEnvironmentRequest {
     @NotBlank(message = "Description is required")
     private String description;
     @NotBlank(message = "Environment ARN is required")
-    @Pattern(regexp = "^arn:(aws[a-zA-Z-]*)?:[a-z0-9-]+:[a-z0-9-]*:[0-9]*:.+$", message = "Invalid AWS arn format")
-    private String environmentArn;
+//    @Pattern(regexp = "^arn:(aws[a-zA-Z-]*)?:[a-z0-9-]+:[a-z0-9-]*:[0-9]*:.+$", message = "Invalid AWS arn format")
+    @NotBlank
+    private String externalId;
     @NotBlank(message = "User ID is required")
     private String userId;
 }

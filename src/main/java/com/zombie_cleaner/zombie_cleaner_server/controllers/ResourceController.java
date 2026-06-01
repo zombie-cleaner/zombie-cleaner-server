@@ -4,6 +4,7 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.services.impl.AwsServiceImpl;
 import lombok.NonNull;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ResourceController {
     private AwsServiceImpl awsService;
 
     @GetMapping("/api/{environmentId}/resources")
-    public ResponseEntity<@NonNull ApiResponse<List<List<ExternalResourceSummary>>>> getResources(@PathVariable String environmentId){
+    public ResponseEntity<@NonNull ApiResponse<List<List<ExternalResourceSummary>>>> getResources(@PathVariable String environmentId) throws AuthenticationException {
         List<List<ExternalResourceSummary>> lists = awsService.getResources(environmentId);
 
         ApiResponse<List<List<ExternalResourceSummary>>> response = ApiResponse.success(lists);

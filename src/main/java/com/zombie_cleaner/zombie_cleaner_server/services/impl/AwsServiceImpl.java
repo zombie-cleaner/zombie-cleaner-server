@@ -1,9 +1,14 @@
 package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
+import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.services.AwsService;
+import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AwsClientFactory;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.Instance;
@@ -24,10 +29,25 @@ import java.util.Map;
 public class AwsServiceImpl implements AwsService {
 
     private final AwsClientFactory factory;
+    @Autowired
+    private AuthenticationUtil authenticationUtil;
+    @Autowired
+    private EnvironmentServiceImpl environmentService;
 
     @Override
-    public List<List<ExternalResourceSummary>> getResources(String environmentId){
-        return new ArrayList<>();
+    public List<List<ExternalResourceSummary>> getResources(String environmentId) throws AuthenticationException {
+        Long currentUserId = authenticationUtil.getCurrentUserId();
+
+        EnvironmentDetails environment= environmentService.getEnvironmentById(environmentId, currentUserId);
+        String externalId = environment.getExternalId();
+
+        List<List<ExternalResourceSummary>> listOfResources = new ArrayList<>();
+        listOfResources.add( getEC2List(externalId));
+        listOfResources.add( getRDSList(externalId));
+        listOfResources.add( getS3List(externalId));
+        listOfResources.add(getLogGroupsList(externalId));
+
+        return listOfResources;
     }
 
     @Override
