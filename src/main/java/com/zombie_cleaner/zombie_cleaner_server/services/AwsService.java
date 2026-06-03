@@ -12,7 +12,6 @@ public interface AwsService {
     public List<ExternalResourceSummary> getS3List(String externalId);
     public List<ExternalResourceSummary> getLogGroupsList(String externalId);
 
-    boolean setDeleteEvent();
-
-    boolean setUpdateEvent();
-}
+    public boolean setDeleteEvent();
+    public boolean setUpdateEvent();
+    }

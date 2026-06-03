@@ -11,6 +11,4 @@ public interface EnvironmentService {
     public List<Environment> getUsersAllEnvironments(String id);
     public EnvironmentDetails getEnvironmentById(String id, Long userId) throws AuthenticationException;
     public Environment createEnvironment(CreateEnvironmentRequest environment);
-    public boolean setDeleteEvent();
-    public boolean setUpdateEvent();
 }
