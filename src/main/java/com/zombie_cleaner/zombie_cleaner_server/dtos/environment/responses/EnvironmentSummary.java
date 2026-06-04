@@ -11,6 +11,6 @@ public class EnvironmentSummary {
     private Long id;
     private String environmentName;
     private String description;
-    private String environmentArn;
+    private String externalId;
     private Number resourceCount;
 }
