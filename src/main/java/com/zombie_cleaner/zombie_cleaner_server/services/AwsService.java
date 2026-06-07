@@ -14,6 +14,6 @@ public interface AwsService {
     public List<ExternalResourceSummary> getS3List(String externalId);
     public List<ExternalResourceSummary> getLogGroupsList(String externalId);
 
-    public boolean setDeleteEvent(DeleteEventRequest deleteEventRequest);
-    public boolean setUpdateEvent(UpdateEventRequest updateEventRequest);
+    public boolean setDeleteEvent(String environmentId, String resourceArn, DeleteEventRequest deleteEventRequest) throws AuthenticationException;
+    public boolean setUpdateEvent(String environmentId, String resourceArn, UpdateEventRequest updateEventRequest) throws AuthenticationException;
     }

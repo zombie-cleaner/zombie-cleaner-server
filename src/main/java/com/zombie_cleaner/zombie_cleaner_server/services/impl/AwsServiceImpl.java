@@ -3,15 +3,17 @@ package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.requests.DeleteEventRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.requests.UpdateEventRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
-import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
+import com.zombie_cleaner.zombie_cleaner_server.repositories.EnvironmentRepository;
 import com.zombie_cleaner.zombie_cleaner_server.services.AwsService;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
-import com.zombie_cleaner.zombie_cleaner_server.utils.AwsClientFactory;
+import com.zombie_cleaner.zombie_cleaner_server.utils.aws.AwsClientFactory;
+import com.zombie_cleaner.zombie_cleaner_server.utils.aws.AwsUtilFunctions;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.eventbridge.EventBridgeClient;
 import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.DescribeInstancesResponse;
 import software.amazon.awssdk.services.rds.RdsClient;
@@ -34,13 +36,15 @@ public class AwsServiceImpl implements AwsService {
     private AuthenticationUtil authenticationUtil;
     @Autowired
     private EnvironmentServiceImpl environmentService;
+    @Autowired
+    private EnvironmentRepository environmentRepository;
+    @Autowired
+    private AwsUtilFunctions awsUtil;
 
     @Override
     public List<List<ExternalResourceSummary>> getResources(String environmentId) throws AuthenticationException {
         Long currentUserId = authenticationUtil.getCurrentUserId();
-
-        EnvironmentDetails environment= environmentService.getEnvironmentById(environmentId, currentUserId);
-        String externalId = environment.getExternalId();
+        String externalId = awsUtil.getExternalId(environmentId);
 
         List<List<ExternalResourceSummary>> listOfResources = new ArrayList<>();
         listOfResources.add( getEC2List(externalId));
@@ -142,12 +146,19 @@ public class AwsServiceImpl implements AwsService {
     }
 
     @Override
-    public boolean setDeleteEvent(DeleteEventRequest deleteEventRequest){
+    public boolean setDeleteEvent(String environmentId, String resourceArn, DeleteEventRequest deleteEventRequest) throws AuthenticationException{
+
+        String externalId = awsUtil.getExternalId(environmentId);
+        try(EventBridgeClient eventBridgeClient = factory.createClient(EventBridgeClient::builder, externalId)){
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
         return true;
     }
 
     @Override
-    public boolean setUpdateEvent(UpdateEventRequest updateEventRequest){
+    public boolean setUpdateEvent(String environmentId, String resourceArn, UpdateEventRequest updateEventRequest) throws AuthenticationException {
         return true;
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface EnvironmentService {
     public List<Environment> getUsersAllEnvironments(String id);
-    public EnvironmentDetails getEnvironmentById(String id, Long userId) throws AuthenticationException;
+    public Environment getEnvironmentById(String id, Long userId) throws AuthenticationException;
     public Environment createEnvironment(CreateEnvironmentRequest environment);
+    public EnvironmentDetails getEnvironmentDetails(String environmentId, Long userId) throws AuthenticationException;
 }

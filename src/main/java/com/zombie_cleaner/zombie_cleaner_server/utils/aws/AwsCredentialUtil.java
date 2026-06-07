@@ -1,4 +1,4 @@
-package com.zombie_cleaner.zombie_cleaner_server.utils;
+package com.zombie_cleaner.zombie_cleaner_server.utils.aws;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

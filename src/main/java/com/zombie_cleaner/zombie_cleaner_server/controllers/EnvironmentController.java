@@ -35,7 +35,7 @@ public class EnvironmentController {
         // Fetch environment and verify ownership
         EnvironmentDetails environment = null;
         try {
-            environment = environmentService.getEnvironmentById(id, currentUserId);
+            environment = environmentService.getEnvironmentDetails(id, currentUserId);
         } catch (org.apache.tomcat.websocket.AuthenticationException e) {
             throw new RuntimeException(e);
         }

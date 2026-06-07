@@ -12,12 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class ResourceController {
@@ -34,17 +29,16 @@ public class ResourceController {
 
 //    Scheduled deletion
     @PostMapping("/api/{environmentId}/resources/delete/{resourceArn}")
-    public ResponseEntity<@NonNull ApiResponse<Boolean>> setDeleteEvent(@PathVariable String environmentId, @PathVariable String resourceArn, @Valid @RequestBody DeleteEventRequest deleteEventRequest){
-        Boolean isSuccess = awsService.setDeleteEvent(deleteEventRequest);
+    public ResponseEntity<@NonNull ApiResponse<Boolean>> setDeleteEvent(@PathVariable String environmentId, @PathVariable String resourceArn, @Valid @RequestBody DeleteEventRequest deleteEventRequest) throws AuthenticationException{
+        Boolean isSuccess = awsService.setDeleteEvent(environmentId, resourceArn, deleteEventRequest);
         ApiResponse<Boolean> response = ApiResponse.success(isSuccess, isSuccess ? "Resource is set to delete" : "Resource was not scheduled to deletion");
         return new ResponseEntity<>(response, isSuccess ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
 
 //    Scheduled downtime
     @PostMapping("/api/{environmentId}/resource/update/{resourceArn}")
-    public ResponseEntity<@NonNull ApiResponse<Boolean>> setUpdateEvent(@PathVariable String environmentId, @PathVariable String resourceArn, @Valid @RequestBody UpdateEventRequest updateEventRequest){
-        Boolean isSuccess = awsService.setUpdateEvent(updateEventRequest);
+    public ResponseEntity<@NonNull ApiResponse<Boolean>> setUpdateEvent(@PathVariable String environmentId, @PathVariable String resourceArn, @Valid @RequestBody UpdateEventRequest updateEventRequest) throws AuthenticationException{
+        Boolean isSuccess = awsService.setUpdateEvent(environmentId, resourceArn, updateEventRequest);
         ApiResponse<Boolean> response = ApiResponse.success(isSuccess, isSuccess ? "Resource is set to update" : "Resource was not scheduled for shutdown");
         return new ResponseEntity<>(response, isSuccess ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
     }

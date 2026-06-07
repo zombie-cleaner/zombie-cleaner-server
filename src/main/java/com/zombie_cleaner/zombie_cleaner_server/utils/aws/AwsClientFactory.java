@@ -1,4 +1,4 @@
-package com.zombie_cleaner.zombie_cleaner_server.utils;
+package com.zombie_cleaner.zombie_cleaner_server.utils.aws;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
