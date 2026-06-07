@@ -1,5 +1,7 @@
 package com.zombie_cleaner.zombie_cleaner_server.services.impl;
 
+import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.requests.DeleteEventRequest;
+import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.requests.UpdateEventRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.environment.responses.EnvironmentDetails;
 import com.zombie_cleaner.zombie_cleaner_server.services.AwsService;
@@ -140,12 +142,12 @@ public class AwsServiceImpl implements AwsService {
     }
 
     @Override
-    public boolean setDeleteEvent(){
+    public boolean setDeleteEvent(DeleteEventRequest deleteEventRequest){
         return true;
     }
 
     @Override
-    public boolean setUpdateEvent(){
+    public boolean setUpdateEvent(UpdateEventRequest updateEventRequest){
         return true;
     }
 }
