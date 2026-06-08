@@ -28,14 +28,10 @@ public class EnvironmentController {
      */
     @GetMapping("/api/environment/{id}")
     public ResponseEntity<@NonNull ApiResponse<EnvironmentDetails>> getEnvironmentById(@PathVariable String id) {
-
-        // Get the current user's ID from the authenticated principal
-        Long currentUserId = authenticationUtil.getCurrentUserId();
-
         // Fetch environment and verify ownership
         EnvironmentDetails environment = null;
         try {
-            environment = environmentService.getEnvironmentDetails(id, currentUserId);
+            environment = environmentService.getEnvironmentDetails(id);
         } catch (org.apache.tomcat.websocket.AuthenticationException e) {
             throw new RuntimeException(e);
         }

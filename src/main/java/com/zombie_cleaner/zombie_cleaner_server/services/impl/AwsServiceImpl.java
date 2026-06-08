@@ -5,6 +5,7 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.requests.UpdateEventReq
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
 import com.zombie_cleaner.zombie_cleaner_server.repositories.EnvironmentRepository;
 import com.zombie_cleaner.zombie_cleaner_server.services.AwsService;
+import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
 import com.zombie_cleaner.zombie_cleaner_server.utils.aws.AwsClientFactory;
 import com.zombie_cleaner.zombie_cleaner_server.utils.aws.AwsUtilFunctions;
@@ -35,7 +36,7 @@ public class AwsServiceImpl implements AwsService {
     @Autowired
     private AuthenticationUtil authenticationUtil;
     @Autowired
-    private EnvironmentServiceImpl environmentService;
+    private EnvironmentService environmentService;
     @Autowired
     private EnvironmentRepository environmentRepository;
     @Autowired

@@ -3,6 +3,7 @@ package com.zombie_cleaner.zombie_cleaner_server.controllers;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.user.responses.UserDetailsResponse;
 import com.zombie_cleaner.zombie_cleaner_server.entities.User;
+import com.zombie_cleaner.zombie_cleaner_server.services.UserDetailsService;
 import com.zombie_cleaner.zombie_cleaner_server.services.impl.UserDetailsServiceImpl;
 import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
 import lombok.NonNull;
@@ -20,7 +21,7 @@ import java.security.Principal;
 public class UserController {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private AuthenticationUtil authenticationUtil;

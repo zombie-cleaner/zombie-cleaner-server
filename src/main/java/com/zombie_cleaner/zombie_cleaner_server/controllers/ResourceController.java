@@ -4,6 +4,7 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.requests.DeleteEventRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.requests.UpdateEventRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.aws.responses.ExternalResourceSummary;
+import com.zombie_cleaner.zombie_cleaner_server.services.AwsService;
 import com.zombie_cleaner.zombie_cleaner_server.services.impl.AwsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 public class ResourceController {
     @Autowired
-    private AwsServiceImpl awsService;
+    private AwsService awsService;
 
     @GetMapping("/api/{environmentId}/resources")
     public ResponseEntity<@NonNull ApiResponse<List<List<ExternalResourceSummary>>>> getResources(@PathVariable String environmentId) throws AuthenticationException {

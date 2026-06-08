@@ -11,8 +11,10 @@ import com.zombie_cleaner.zombie_cleaner_server.exceptions.customExceptions.Reso
 import com.zombie_cleaner.zombie_cleaner_server.repositories.EnvironmentRepository;
 import com.zombie_cleaner.zombie_cleaner_server.repositories.UserRepository;
 import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
+import com.zombie_cleaner.zombie_cleaner_server.utils.AuthenticationUtil;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +22,12 @@ import java.util.List;
 
 @Service
 public class EnvironmentServiceImpl implements EnvironmentService {
-    EnvironmentRepository environmentRepository;
-    UserRepository userRepository;
-
-    public EnvironmentServiceImpl(EnvironmentRepository environmentRepository, UserRepository userRepository) {
-        this.environmentRepository = environmentRepository;
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private EnvironmentRepository environmentRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private AuthenticationUtil authenticationUtil;
 
     @Override
     public List<Environment> getUsersAllEnvironments(String id) {
@@ -35,8 +36,8 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     }
 
     @Override
-    public Environment getEnvironmentById(String environmentId, Long userId) throws AuthenticationException {
-
+    public Environment getEnvironmentById(String environmentId) throws AuthenticationException {
+        Long userId = authenticationUtil.getCurrentUserId();
         Environment environment = environmentRepository.findById(Long.parseLong(environmentId)).orElseThrow(() -> new ResourceNotFoundException("Environment", "Environment Id", environmentId));
         if (!environment.getUser().getId().equals(userId)) {
             throw new AuthenticationException("Unauthorized access to environment with id: " + environmentId);
@@ -44,8 +45,8 @@ public class EnvironmentServiceImpl implements EnvironmentService {
         return environment;
     }
     @Override
-    public EnvironmentDetails getEnvironmentDetails(String environmentId, Long userId) throws AuthenticationException{
-        Environment environment = getEnvironmentById(environmentId, userId);
+    public EnvironmentDetails getEnvironmentDetails(String environmentId) throws AuthenticationException{
+        Environment environment = getEnvironmentById(environmentId);
         List<ResourceSummary> resources = environment.getResources()
                 .stream()
                 .map(resource -> new ResourceSummary(

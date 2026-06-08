@@ -4,6 +4,7 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.ApiResponse;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.requests.LoginRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.requests.RegisterRequest;
 import com.zombie_cleaner.zombie_cleaner_server.dtos.auth.responses.LoginResponse;
+import com.zombie_cleaner.zombie_cleaner_server.services.AuthService;
 import com.zombie_cleaner.zombie_cleaner_server.services.impl.AuthServiceImpl;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private AuthServiceImpl authService;
+    private AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<@NonNull ApiResponse<LoginResponse>> login(
