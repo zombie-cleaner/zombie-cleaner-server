@@ -5,7 +5,9 @@ import com.zombie_cleaner.zombie_cleaner_server.dtos.user.responses.UserDetailsR
 import com.zombie_cleaner.zombie_cleaner_server.entities.Environment;
 import com.zombie_cleaner.zombie_cleaner_server.entities.User;
 import com.zombie_cleaner.zombie_cleaner_server.repositories.UserRepository;
+import com.zombie_cleaner.zombie_cleaner_server.services.EnvironmentService;
 import com.zombie_cleaner.zombie_cleaner_server.services.UserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -16,20 +18,16 @@ import java.util.List;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
-    private final EnvironmentServiceImpl environmentService;
-
-    public UserDetailsServiceImpl(UserRepository userRepository, EnvironmentServiceImpl environmentService) {
-        this.userRepository = userRepository;
-        this.environmentService = environmentService;
-    }
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private EnvironmentService environmentService;
     @Override
     public User loadUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
+    @Override
     public UserDetailsResponse getUserWithEnvironments(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
