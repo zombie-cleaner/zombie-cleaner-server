@@ -152,6 +152,8 @@ public class AwsServiceImpl implements AwsService {
         String externalId = awsUtil.getExternalId(environmentId);
         try(EventBridgeClient eventBridgeClient = factory.createClient(EventBridgeClient::builder, externalId)){
 
+            Object response = awsUtil.setEvent(eventBridgeClient, "DELETE_RESOURCE");
+
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
@@ -160,6 +162,12 @@ public class AwsServiceImpl implements AwsService {
 
     @Override
     public boolean setUpdateEvent(String environmentId, String resourceArn, UpdateEventRequest updateEventRequest) throws AuthenticationException {
+        String externalId = awsUtil.getExternalId(environmentId);
+        try(EventBridgeClient eventBridgeClient = factory.createClient(EventBridgeClient::builder, externalId)){
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
         return true;
     }
 }
