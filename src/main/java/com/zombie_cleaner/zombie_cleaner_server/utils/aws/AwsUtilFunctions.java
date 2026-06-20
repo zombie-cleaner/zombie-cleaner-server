@@ -27,7 +27,7 @@ public class AwsUtilFunctions {
         return environment.getExternalId();
     }
 
-    public void setEvent(EventBridgeClient eventBridgeClient, LocalDateTime time, Object payload, String typeOfEvent ) throws RuntimeException{
+    public void setEvent(EventBridgeClient eventBridgeClient,  Object payload, String typeOfEvent, LocalDateTime shutdownStartTime, LocalDateTime shutdownEndTime) throws RuntimeException{
         ObjectMapper objectMapper = new ObjectMapper();
 
         // convert payload to string

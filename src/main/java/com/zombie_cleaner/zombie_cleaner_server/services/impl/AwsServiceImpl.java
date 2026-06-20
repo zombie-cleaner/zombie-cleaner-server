@@ -152,6 +152,14 @@ public class AwsServiceImpl implements AwsService {
         String externalId = awsUtil.getExternalId(environmentId);
         try(EventBridgeClient eventBridgeClient = factory.createClient(EventBridgeClient::builder, externalId)){
 
+//            "detail": {
+//                "resourceType": "cloudwatch-log",
+//                        "resourceIdentifier": "/aws/lambda/crud_handler-my-app-dev",
+//                        "auth-creds": {
+//                    "roleArn": "arn:aws:iam::816881850355:role/IdleZeroAccessRole",
+//                        "externalId": "816881850355"
+//                }
+//            }
             Object response = awsUtil.setEvent(eventBridgeClient, "DELETE_RESOURCE");
 
         } catch (RuntimeException e) {
