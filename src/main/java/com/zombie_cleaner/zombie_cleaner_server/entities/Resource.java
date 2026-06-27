@@ -26,6 +26,9 @@ public class Resource {
     @Column(name = "resourceArn", nullable = false, unique = true)
     private String resourceArn;
 
+    @Column(name = "status", nullable = false, unique = false)
+    private String status;
+
     @Column(name = "resourceIdentifierAws", nullable = false , unique = true)
     private String resourceIdentifierAws;
 

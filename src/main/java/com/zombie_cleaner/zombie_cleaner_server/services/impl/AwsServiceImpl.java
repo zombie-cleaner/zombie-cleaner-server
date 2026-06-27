@@ -160,7 +160,7 @@ public class AwsServiceImpl implements AwsService {
 //                        "externalId": "816881850355"
 //                }
 //            }
-            Object response = awsUtil.setEvent(eventBridgeClient, "DELETE_RESOURCE");
+//            Object response = awsUtil.setEvent(eventBridgeClient, "DELETE_RESOURCE");
 
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
